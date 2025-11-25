@@ -1,6 +1,5 @@
-package org.ies.myapp.ui.theme
+package org.ies.myapp.presentation.ui.theme
 
-import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
