@@ -27,7 +27,6 @@ import androidx.compose.ui.unit.sp
 @Composable
 fun LazyColumna (){
     val itemList = List(20) {"Item $it"}
-    var isChecked by remember { mutableStateOf(false) }
     Scaffold (
         bottomBar = {
             BottomAppBar {
@@ -44,6 +43,7 @@ fun LazyColumna (){
                 fontSize = 24.sp)
             LazyColumn {
                 items(itemList) { item ->
+                    var isChecked by remember { mutableStateOf(false) }
                     Row (
                         verticalAlignment = Alignment.CenterVertically
                     ){
