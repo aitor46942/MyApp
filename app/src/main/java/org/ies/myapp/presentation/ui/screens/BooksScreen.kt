@@ -15,25 +15,17 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import org.ies.myapp.data.model.Book
+import androidx.lifecycle.viewmodel.compose.viewModel
+import org.ies.myapp.presentation.viewmodel.BookViewModel
 
 @Composable
-fun BooksScreen(){
-    val bookList = listOf(
-        Book("El señor de los anillos", 1, "Pepe"),
-        Book("El hobbit", 2, "Pedro"),
-        Book("Crimen y castigo", 3, "Juan"),
-        Book("Cien años de soledad", 4, "Lorenzo"),
-    )
+fun BooksScreen(viewModel: BookViewModel = viewModel()){
+    val bookList = viewModel.books
     Scaffold { innerPadding ->
         Column (
             modifier = Modifier
@@ -41,13 +33,14 @@ fun BooksScreen(){
                 .fillMaxSize()
         ){
             LazyColumn {
-                items(bookList) {book ->
-                    var isExpanded by remember { mutableStateOf(false) }
+                items(bookList, key = {book -> book.isbn}) {book ->
                     Column (modifier = Modifier.padding(16.dp)){
                         Card (
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .clickable{isExpanded = !isExpanded},
+                                .clickable{
+                                    viewModel.toggleBookExpanded(book.isbn)
+                                },
                             shape = RectangleShape
                         ){
                             Column (
@@ -59,12 +52,12 @@ fun BooksScreen(){
                                     text = book.title,
                                     fontWeight = FontWeight.Bold
                                 )
-                                if (isExpanded) {
+                                if (book.isChecked) {
                                     Text(
                                         text = "ISBN: ${book.isbn}",
                                         )
                                     Text(
-                                        text = "Autor:  ${book.autor}"
+                                        text = "Autor:  ${book.author}"
                                     )
                                     Icon(
                                         imageVector = Icons.Default.Book,
